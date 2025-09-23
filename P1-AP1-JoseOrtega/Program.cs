@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using P1_AP1_JoseOrtega.Components;
 using P1_AP1_JoseOrtega.DAL;
+using P1_AP1_JoseOrtega.Services;
 
 namespace P1_AP1_JoseOrtega;
 
@@ -16,6 +17,8 @@ public class Program
 
         var ConStr = builder.Configuration.GetConnectionString("ConStr");
         builder.Services.AddDbContextFactory<Contexto>(options => options.UseSqlite(ConStr));
+
+        builder.Services.AddScoped<RegistroServicecs>();
 
         var app = builder.Build();
 
