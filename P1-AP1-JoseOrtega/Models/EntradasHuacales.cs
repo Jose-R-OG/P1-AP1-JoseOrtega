@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P1_AP1_JoseOrtega.Models;
 
-public class Registro
+public class EntradasHuacales
 {
     [Key]
     public int Id { get; set; }
