@@ -1,0 +1,135 @@
+﻿@page "/huacales/index"
+
+@inject  EntradasHuacalesServices entradasHuacalesServices
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Entradas De Huacales</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header space-between">
+            <h5 class="card-title">Registro De Entrada Huacales</h5>
+            <a href="/huacales/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span>  Crear</a>
+        </div>
+
+        <div class="card-body">
+
+            @*labels*@
+            <div class="row">
+                <div class="col-3">
+                    <label class="col-form-label"><strong>Filtrar por</strong></label>
+                </div>
+                <div class="col-4">
+                    <label class="col-form-label"><strong>B&uacute;squeda</strong></label>
+                </div>
+            </div>
+
+            @*Inputs y botones*@
+            <div class="row align-items-center">
+                @*filtro*@
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-value="Filtro">
+                        <option value="" selected disabled>Seleccione </option>
+                        <option value="NombreCliente">Nombres Clientes</option>
+                        <option value="Cantidad">Cantidad</option>
+                        <option value="Precio">Precio</option>
+                    </InputSelect>
+                </div>
+
+
+                @*Busqueda*@
+                <div class="col-4">
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+                @*Restaurar*@
+                <div class="col-2">
+                    <button type="button" class="btn btn-outline-primary bi bi-arrow-counterclockwise" @onclick="Restablecer"></button>
+                </div>
+
+                <table class="table table-hover">
+                    <thead class="table table-striped text-black">
+                        <tr>
+                            <th></th>
+                            <th>Entrada Huacales Id</th>
+                            <th>Nombres clientes</th>
+                            <th>Fecha</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Editar</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Entrada in ListaHuacales)
+                        {
+                            <tr>
+                                <td>@Entrada.IdEntrada</td>
+                                <td>@Entrada.NombreCliente</td>
+                                <td>@Entrada.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@Entrada.Cantidad</td>
+                                <td>@Entrada.Precio</td>
+
+
+                                <td class="text-center">
+                                    <a href="/huacales/Edit/@Entrada.IdEntrada" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            <div class="card-footer space-between">
+                <label class="ms-3"><strong>Cantidad: </strong> @ListaHuacales.Count()</label>
+                <div class="col-8">
+                    <label class="ms-5"><strong>Total Huacales: </strong>@ListaHuacales.Sum(e => e.Cantidad)</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaHuacales = await entradasHuacalesServices.Listar(e => e.IdEntrada > 0);
+    }
+
+    private async Task Buscar()
+    {
+        if (ValorFiltro.Trim() != "")
+        {
+            if (Filtro == nameof(EntradasHuacales.NombreCliente))
+            {
+                ListaHuacales = await entradasHuacalesServices.Listar(e => e.NombreCliente.ToLower().Contains(ValorFiltro.ToLower()));
+            }
+            else if (Filtro == nameof(EntradasHuacales.Cantidad) && int.TryParse(ValorFiltro, out var cantidad))
+            {
+                ListaHuacales = await entradasHuacalesServices.Listar(e => e.Cantidad == cantidad);
+            }
+            else if (Filtro == nameof(EntradasHuacales.Precio) && double.TryParse(ValorFiltro, out var precio))
+            {
+                ListaHuacales = await entradasHuacalesServices.Listar(e => e.Precio == precio);
+            }
+        }
+    }
+
+    private async Task Restablecer()
+    {
+        ListaHuacales = await entradasHuacalesServices.Listar(e => e.IdEntrada > 0);
+        Filtro = string.Empty;
+        ValorFiltro = string.Empty;
+    }
+
+}

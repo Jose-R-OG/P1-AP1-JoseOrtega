@@ -1,0 +1,96 @@
+﻿@page "/huacales/Edit/{EntradaId:int}"
+
+@inject EntradasHuacalesServices entradasHuacalesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Crear Entrada huacales</PageTitle>
+
+<EditForm Model="entradasHuacales" OnValidSubmit="Modificar" FormName="EntradasHuacales">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h3 class="card-title"> Crear Entradas de Huacales</h3>
+            </div>
+
+
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nombre Cliente</strong></label>
+                    <InputText class="form-control" @bind-Value="entradasHuacales.NombreCliente" />
+                    <ValidationMessage For="@(() => entradasHuacales.NombreCliente)" />
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Fecha</strong></label>
+                    <InputDate class="form-control" @bind-Value="entradasHuacales.Fecha"></InputDate>
+                    <ValidationMessage For="@(() => entradasHuacales.Fecha)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Cantidad</strong></label>
+                    <InputNumber class="form-control" @bind-Value="entradasHuacales.Cantidad"></InputNumber>
+                    <ValidationMessage For="@(() => entradasHuacales.Cantidad)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Precio</strong></label>
+                    <InputNumber class="form-control" @bind-Value="entradasHuacales.Precio"></InputNumber>
+                    <ValidationMessage For="@(() => entradasHuacales.Precio)" />
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center mt-2">
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-outline-success bi bi-check-circle"> Modificar</button>
+                    <button type="button" class="btn btn-outline-danger bi bi-check-circle" @onclick="Eliminar"> Eliminar</button>
+                    <a href="/huacales/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int EntradaId { get; set; }
+    public EntradasHuacales entradasHuacales { get; set; } = new EntradasHuacales();
+    public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var buscar = await entradasHuacalesServices.Buscar(EntradaId);
+        if (buscar != null)
+        {
+            entradasHuacales = buscar;
+        }
+        ListaHuacales = await entradasHuacalesServices.Listar(e => e.IdEntrada > 0);
+    }
+
+    public async Task Modificar()
+    {
+        var modificado = await entradasHuacalesServices.Guardar(entradasHuacales);
+        if (modificado)
+        {
+            navigationManager.NavigateTo("/huacales/index");
+        }
+    }
+
+    private async Task Eliminar()
+    {
+        var eliminado = await entradasHuacalesServices.Eliminar(EntradaId);
+        if (eliminado)
+        {
+            navigationManager.NavigateTo("/huacales/index");
+        }
+    }
+}
+
