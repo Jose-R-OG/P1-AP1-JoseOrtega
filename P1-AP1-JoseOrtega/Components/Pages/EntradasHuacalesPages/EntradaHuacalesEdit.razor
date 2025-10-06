@@ -17,17 +17,17 @@
 
 
             <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label"><strong>Nombre Cliente</strong></label>
-                    <InputText class="form-control" @bind-Value="entradasHuacales.NombreCliente" />
-                    <ValidationMessage For="@(() => entradasHuacales.NombreCliente)" />
-                </div>
-
 
                 <div class="mb-3">
                     <label class="form-label"><strong>Fecha</strong></label>
                     <InputDate class="form-control" @bind-Value="entradasHuacales.Fecha"></InputDate>
                     <ValidationMessage For="@(() => entradasHuacales.Fecha)" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><strong>Nombre Cliente</strong></label>
+                    <InputText class="form-control" @bind-Value="entradasHuacales.NombreCliente" />
+                    <ValidationMessage For="@(() => entradasHuacales.NombreCliente)" />
                 </div>
 
                 <div class="mb-3">
@@ -42,12 +42,17 @@
                     <ValidationMessage For="@(() => entradasHuacales.Precio)" />
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label"><strong>Importe</strong></label>
+                    <label class="form-control"> @(entradasHuacales.Precio* entradasHuacales.Cantidad)</label>
+                </div>
+
             </div>
 
             <div class="card-footer text-center mt-2">
                 <div class="btn-group">
                     <button type="submit" class="btn btn-outline-success bi bi-check-circle"> Modificar</button>
-                    <button type="button" class="btn btn-outline-danger bi bi-check-circle" @onclick="Eliminar"> Eliminar</button>
+                    <button type="button" class="btn btn-outline-danger bi bi-check-circle" @onclick="MostrarModalEliminar"> Eliminar</button>
                     <a href="/huacales/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
                 </div>
 
@@ -57,12 +62,38 @@
         </div>
     </div>
 </EditForm>
+@if (MostrarModal)
+{
+    <div class="modal show" tabindex="-1" style="display: block;" aria-labelledby="confirmDeleteModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminacion</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="CerrarModalEliminar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estas seguro de que quieres eliminar la entrada huacal?</p>
+                    <p><strong>EntradaId:</strong> @entradasHuacales.IdEntrada</p>
+                    <p><strong>Nombre:</strong> @entradasHuacales.NombreCliente</p>
+                    <p><strong>Cantidad:</strong> @entradasHuacales.Cantidad</p>
+                    <p><strong>Precio:</strong> @entradasHuacales.Precio</p>
+                    <p><strong>Fecha:</strong> @entradasHuacales.Fecha.ToString("dd/MM/yyyy")</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarModalEliminar">Volver</button>
+                    <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
     public int EntradaId { get; set; }
     public EntradasHuacales entradasHuacales { get; set; } = new EntradasHuacales();
     public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
+    private bool MostrarModal { get; set; } = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -92,5 +123,16 @@
             navigationManager.NavigateTo("/huacales/index");
         }
     }
+
+    private void MostrarModalEliminar()
+    {
+        MostrarModal = true;
+    }
+
+    private void CerrarModalEliminar()
+    {
+        MostrarModal = false;
+    }
+
 }
 

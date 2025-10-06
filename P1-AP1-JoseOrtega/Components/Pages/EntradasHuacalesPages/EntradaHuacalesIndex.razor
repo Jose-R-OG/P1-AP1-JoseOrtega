@@ -53,12 +53,12 @@
                 <table class="table table-hover">
                     <thead class="table table-striped text-black">
                         <tr>
-                            <th></th>
-                            <th>Entrada Huacales Id</th>
-                            <th>Nombres clientes</th>
+                            <th>Id</th>
                             <th>Fecha</th>
+                            <th>Clientes</th>
                             <th>Cantidad</th>
                             <th>Precio</th>
+                            <th>Importe</th>
                             <th>Editar</th>
 
                         </tr>
@@ -66,15 +66,19 @@
                     <tbody>
                         @foreach (var Entrada in ListaHuacales)
                         {
+                        
+                                importeT += (Entrada.Cantidad * Entrada.Precio);
+                            
                             <tr>
                                 <td>@Entrada.IdEntrada</td>
-                                <td>@Entrada.NombreCliente</td>
                                 <td>@Entrada.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@Entrada.NombreCliente</td>
                                 <td>@Entrada.Cantidad</td>
                                 <td>@Entrada.Precio</td>
+                                <td>@(Entrada.Precio*Entrada.Cantidad)</td>
 
 
-                                <td class="text-center">
+                                <td>
                                     <a href="/huacales/Edit/@Entrada.IdEntrada" class="btn btn-outline-primary bi bi-pencil-square"></a>
                                 </td>
                             </tr>
@@ -84,14 +88,15 @@
 
 
             </div>
+        </div>
 
-            <div class="card-footer space-between">
-                <label class="ms-3"><strong>Cantidad: </strong> @ListaHuacales.Count()</label>
-                <div class="col-8">
-                    <label class="ms-5"><strong>Total Huacales: </strong>@ListaHuacales.Sum(e => e.Cantidad)</label>
-                </div>
+        <div class="card-footer space-between">
+            <label class="ms-3"><strong>Cantidad: </strong> @ListaHuacales.Count()</label>
+            <div class="col-8">
+                <label class="ms-5"><strong>Total general: </strong>@importeT</label>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -100,6 +105,7 @@
     public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+    public double importeT { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {

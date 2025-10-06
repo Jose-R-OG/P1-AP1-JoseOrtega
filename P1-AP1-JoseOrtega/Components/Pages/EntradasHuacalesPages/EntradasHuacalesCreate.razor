@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Crear Entrada huacales</PageTitle>
-<EditForm Model="entradasHuacales" OnInvalidSubmit="Guardar">
+<EditForm Model="entradasHuacales" OnValidSubmit="Guardar">
 	<DataAnnotationsValidator />
 	<div class="container">
 		<div class="card shadow-lg">
@@ -14,19 +14,19 @@
 			</div>
 
 			<div class="card-body">
-				@*Nombre cliente*@
-				<div class="mb-3">
-					<label class="form-label"><strong>Nombre Cliente</strong></label>
-					<InputText class="form-control" @bind-Value="entradasHuacales.NombreCliente" />
-					<ValidationMessage For="@(() => entradasHuacales.NombreCliente)" />
-				</div>
-
 
 				@*Fecha*@
 				<div class="mb-3">
 					<label class="form-label"><strong>Fecha</strong></label>
 					<InputDate class="form-control" @bind-Value="entradasHuacales.Fecha"></InputDate>
 					<ValidationMessage For="@(() => entradasHuacales.Fecha)" />
+				</div>
+
+				@*Nombre cliente*@
+				<div class="mb-3">
+					<label class="form-label"><strong>Nombre Cliente</strong></label>
+					<InputText class="form-control" @bind-Value="entradasHuacales.NombreCliente" />
+					<ValidationMessage For="@(() => entradasHuacales.NombreCliente)" />
 				</div>
 
 				@*Cantidad*@
@@ -43,12 +43,17 @@
 					<ValidationMessage For="@(() => entradasHuacales.Precio)" />
 				</div>
 
+				<div class="mb-3">
+					<label class="form-label"><strong>Importe</strong></label>
+					<label class="form-control"> @(entradasHuacales.Precio*entradasHuacales.Cantidad)</label>
+				</div>
+
 			</div>
 
 			@*Footer*@
 			<div class="card-footer text-center mt-2">
 				<div class="btn-group">
-					<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Guardar" > Guardar</button>
+					<button type="submit" class="btn btn-outline-success bi bi-check-circle"> Guardar</button>
 					<a href="/huacales/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
 

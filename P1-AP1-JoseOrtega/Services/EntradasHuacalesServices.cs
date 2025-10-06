@@ -29,8 +29,14 @@ public class EntradasHuacalesServices(IDbContextFactory<Contexto> DbFactory)
 
     public async Task<bool> Guardar(EntradasHuacales huacales)
     {
-        if (! await Existe(huacales.IdEntrada)) return await Insertar(huacales);
-        else return await Modificar(huacales);
+        if (!await Existe(huacales.IdEntrada))
+        {
+            return await Insertar(huacales);
+        }
+        else 
+        {
+            return await Modificar(huacales);
+        }
     }
 
     public async Task<EntradasHuacales?> Buscar(int idhuacales)
