@@ -66,6 +66,9 @@
                     <tbody>
                         @foreach (var Entrada in ListaHuacales)
                         {
+                        
+                                importeT += (Entrada.Cantidad * Entrada.Precio);
+                            
                             <tr>
                                 <td>@Entrada.IdEntrada</td>
                                 <td>@Entrada.Fecha.ToString("dd/MM/yyyy")</td>
@@ -90,7 +93,7 @@
         <div class="card-footer space-between">
             <label class="ms-3"><strong>Cantidad: </strong> @ListaHuacales.Count()</label>
             <div class="col-8">
-                <label class="ms-5"><strong>Total Huacales: </strong>@ListaHuacales.Sum(e => e.Cantidad)</label>
+                <label class="ms-5"><strong>Total general: </strong>@importeT</label>
             </div>
         </div>
 
@@ -102,6 +105,7 @@
     public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+    public double importeT { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {

@@ -43,6 +43,11 @@
 					<ValidationMessage For="@(() => entradasHuacales.Precio)" />
 				</div>
 
+				<div class="mb-3">
+					<label class="form-label"><strong>Importe</strong></label>
+					<label class="form-control"> @(entradasHuacales.Precio*entradasHuacales.Cantidad)</label>
+				</div>
+
 			</div>
 
 			@*Footer*@
