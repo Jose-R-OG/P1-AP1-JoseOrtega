@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Crear Entrada huacales</PageTitle>
-<EditForm Model="entradasHuacales" OnInvalidSubmit="Guardar">
+<EditForm Model="entradasHuacales" OnValidSubmit="Guardar">
 	<DataAnnotationsValidator />
 	<div class="container">
 		<div class="card shadow-lg">
@@ -48,7 +48,7 @@
 			@*Footer*@
 			<div class="card-footer text-center mt-2">
 				<div class="btn-group">
-					<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Guardar" > Guardar</button>
+					<button type="submit" class="btn btn-outline-success bi bi-check-circle"> Guardar</button>
 					<a href="/huacales/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
 
