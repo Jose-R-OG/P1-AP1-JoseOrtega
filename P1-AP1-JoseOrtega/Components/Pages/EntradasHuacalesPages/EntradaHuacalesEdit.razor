@@ -3,9 +3,10 @@
 @inject EntradasHuacalesServices entradasHuacalesServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <PageTitle>Crear Entrada huacales</PageTitle>
-
+<Toasts class="p-3" AutoHide="true" Delay="5000" Placement="ToastsPlacement.TopRight" />
 <EditForm Model="entradasHuacales" OnValidSubmit="Modificar" FormName="EntradasHuacales">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -51,7 +52,10 @@
 
             <div class="card-footer text-center mt-2">
                 <div class="btn-group">
-                    <button type="submit" class="btn btn-outline-success bi bi-check-circle"> Modificar</button>
+                    @if(!modificado)
+                    {
+                        <button type="submit" class="btn btn-outline-success bi bi-check-circle"> Modificar</button>
+                    }
                     <button type="button" class="btn btn-outline-danger bi bi-check-circle" @onclick="MostrarModalEliminar"> Eliminar</button>
                     <a href="/huacales/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
                 </div>
@@ -81,7 +85,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="CerrarModalEliminar">Volver</button>
-                    <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                    @if (!eliminado)
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar</button>
+                    }
                 </div>
             </div>
         </div>
@@ -94,6 +101,8 @@
     public EntradasHuacales entradasHuacales { get; set; } = new EntradasHuacales();
     public List<EntradasHuacales> ListaHuacales { get; set; } = new List<EntradasHuacales>();
     private bool MostrarModal { get; set; } = false;
+    private bool eliminado { get; set; } = false;
+    private bool modificado { get; set; } = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -108,20 +117,22 @@
 
     public async Task Modificar()
     {
-        var modificado = await entradasHuacalesServices.Guardar(entradasHuacales);
+        modificado = await entradasHuacalesServices.Guardar(entradasHuacales);
         if (modificado)
         {
-            navigationManager.NavigateTo("/huacales/index");
+            toastService.ShowSuccess("La entrada se modifico correctamente");
         }
+        else toastService.ShowError("No se pudo modificar la entrada");
     }
 
     private async Task Eliminar()
     {
-        var eliminado = await entradasHuacalesServices.Eliminar(EntradaId);
+        eliminado = await entradasHuacalesServices.Eliminar(EntradaId);
         if (eliminado)
         {
-            navigationManager.NavigateTo("/huacales/index");
+            toastService.ShowSuccess("La entrada se elimino correctamente");
         }
+        else toastService.ShowError("No se pudo eliminar la entrada");
     }
 
     private void MostrarModalEliminar()
