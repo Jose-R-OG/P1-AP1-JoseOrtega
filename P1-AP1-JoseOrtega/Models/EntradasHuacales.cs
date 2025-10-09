@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P1_AP1_JoseOrtega.Models;
 
@@ -15,4 +16,11 @@ public class EntradasHuacales
     [Required(ErrorMessage = "El precio es un campo obligatorio")]
     [Range(0.01, double.MaxValue, ErrorMessage = "El precio no puede ser un valor igual o menor a 0")]
     public double Precio { get; set; }
+
+    [InverseProperty("EntradaHuacale")]
+    public virtual ICollection<EntradasHuacalesDetalle> EntradaHuacaleDetalle { get; set; } = new List<EntradasHuacalesDetalle>();
+
+    [ForeignKey("TipoId")]
+    [InverseProperty("EntradaHuacale")]
+    public virtual ICollection<TiposHuacales> TipoHuacale { get; set; } = new List<TiposHuacales>();
 }

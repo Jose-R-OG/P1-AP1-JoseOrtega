@@ -10,8 +10,9 @@ public class EntradasHuacalesServices(IDbContextFactory<Contexto> DbFactory)
     private async Task<bool> Existe(int  idhuacales)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.EntradasHuacales.AnyAsync();
+        return await contexto.EntradasHuacales.AnyAsync(e => e.IdEntrada == idhuacales);
     }
+
 
     private async Task<bool> Insertar(EntradasHuacales huacales)
     {
