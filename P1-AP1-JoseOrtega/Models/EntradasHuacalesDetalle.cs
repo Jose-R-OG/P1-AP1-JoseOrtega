@@ -15,7 +15,7 @@ public class EntradasHuacalesDetalle
     public int Cantidad { get; set; }
     [Required(ErrorMessage = "El precio es un campo obligatorio")]
     [Range(0.01, int.MaxValue, ErrorMessage = "El precio de los huacales debe ser mayor que cero")]
-    public string Precio { get; set; }
+    public double Precio { get; set; }
 
     [ForeignKey("IdEntrada")]
     [InverseProperty("EntradaHuacaleDetalle")]
