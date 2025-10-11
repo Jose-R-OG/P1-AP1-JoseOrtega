@@ -53,28 +53,27 @@
                 <table class="table table-hover">
                     <thead class="table table-striped text-black">
                         <tr>
-                            <th></th>
-                            <th>Entrada Huacales Id</th>
-                            <th>Nombres clientes</th>
+                            <th>Id</th>
                             <th>Fecha</th>
+                            <th>Clientes</th>
                             <th>Cantidad</th>
-                            <th>Precio</th>
+                            <th>Importe</th>
                             <th>Editar</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var Entrada in ListaHuacales)
-                        {
+                        {                            
                             <tr>
                                 <td>@Entrada.IdEntrada</td>
-                                <td>@Entrada.NombreCliente</td>
                                 <td>@Entrada.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@Entrada.NombreCliente</td>
                                 <td>@Entrada.Cantidad</td>
-                                <td>@Entrada.Precio</td>
+                                <td>@Entrada.Importe<strong>RD$</strong></td>
 
 
-                                <td class="text-center">
+                                <td>
                                     <a href="/huacales/Edit/@Entrada.IdEntrada" class="btn btn-outline-primary bi bi-pencil-square"></a>
                                 </td>
                             </tr>
@@ -84,14 +83,16 @@
 
 
             </div>
+        </div>
 
-            <div class="card-footer space-between">
-                <label class="ms-3"><strong>Cantidad: </strong> @ListaHuacales.Count()</label>
-                <div class="col-8">
-                    <label class="ms-5"><strong>Total Huacales: </strong>@ListaHuacales.Sum(e => e.Cantidad)</label>
-                </div>
+        <div class="card-footer space-between">
+            <label class="ms-5"><strong>Total general: </strong>@ListaHuacales.Sum(e => e.Importe)</label>
+            <div class="col-8">
+                <label class="ms-3"><strong>Cantidad de entradas: </strong> @ListaHuacales.Count()</label>
+                <label class="ms-5"><strong>Cantidad de Huacales: </strong>@ListaHuacales.Sum(e => e.Cantidad)</label>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -118,9 +119,9 @@
             {
                 ListaHuacales = await entradasHuacalesServices.Listar(e => e.Cantidad == cantidad);
             }
-            else if (Filtro == nameof(EntradasHuacales.Precio) && double.TryParse(ValorFiltro, out var precio))
+            else if (Filtro == nameof(EntradasHuacales.Importe) && double.TryParse(ValorFiltro, out var precio))
             {
-                ListaHuacales = await entradasHuacalesServices.Listar(e => e.Precio == precio);
+                ListaHuacales = await entradasHuacalesServices.Listar(e => e.Importe == precio);
             }
         }
     }
