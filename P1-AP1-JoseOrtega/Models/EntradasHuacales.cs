@@ -13,14 +13,13 @@ public class EntradasHuacales
     [Required(ErrorMessage = "La cantidad de huacales es un campo obligatorio")]
     [Range(1, int.MaxValue, ErrorMessage ="La cantidad no puede ser un valor menor a 1")]
     public int  Cantidad { get; set; }
-    [Required(ErrorMessage = "El precio es un campo obligatorio")]
-    [Range(0.01, double.MaxValue, ErrorMessage = "El precio no puede ser un valor igual o menor a 0")]
-    public double Precio { get; set; }
+    [Required(ErrorMessage = "El importe es un campo obligatorio")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El importe debe ser un valor mayor a 0")]
+    public double Importe { get; set; }
 
     [InverseProperty("EntradaHuacale")]
     public virtual ICollection<EntradasHuacalesDetalle> EntradaHuacaleDetalle { get; set; } = new List<EntradasHuacalesDetalle>();
 
     [ForeignKey("TipoId")]
-    [InverseProperty("EntradaHuacale")]
     public virtual ICollection<TiposHuacales> TipoHuacale { get; set; } = new List<TiposHuacales>();
 }

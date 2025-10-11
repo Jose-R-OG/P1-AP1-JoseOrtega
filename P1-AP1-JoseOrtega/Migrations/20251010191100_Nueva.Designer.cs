@@ -11,8 +11,8 @@ using P1_AP1_JoseOrtega.DAL;
 namespace P1_AP1_JoseOrtega.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20251009190912_Septima")]
-    partial class Septima
+    [Migration("20251010191100_Nueva")]
+    partial class Nueva
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,12 +47,12 @@ namespace P1_AP1_JoseOrtega.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Importe")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("NombreCliente")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<double>("Precio")
-                        .HasColumnType("REAL");
 
                     b.HasKey("IdEntrada");
 
